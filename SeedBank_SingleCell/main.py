@@ -3,12 +3,13 @@ from tools import * #All graphing, animation, and math, are in tools.py for simp
 #To convert images into a gif: 
 #   C:\imagemagick\convert.exe -delay 10 -loop 0 *population.png population_plot.gif
 #   C:\imagemagick\convert.exe -delay 10 -loop 0 *seedbank.png seedbank_plot.gif
-K  = 1.0   #Carrying Capacity
-gm = 0.04   #Growth Max
-l  = 0.6   #The fraction of plants that live
-e  = 5   #Number of seeds per plants
-N  = 10    #Side Length of Space
-T  = 75    #Number of generations the program is run for
+
+K  = 1.0  #Carrying Capacity
+gm = 0.04 #Growth Max
+l  = 0.6  #The fraction of plants that live
+e  = 5    #Number of seeds per plants
+N  = 10   #Side Length of Space
+T  = 75   #Number of generations the program is run for
 
 #Pt is Population of plant at time t
 def g(Pt):
