@@ -2,7 +2,7 @@
 
 This 2d model enacts spread through next generation potentially migrating up, down, left, or right
 
-#Code
+##Code
 main.py contains all graphing related functions as well as the model
 
 ##Graphs
