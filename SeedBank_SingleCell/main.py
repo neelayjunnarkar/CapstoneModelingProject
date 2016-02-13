@@ -4,8 +4,6 @@ from tools import * #All graphing, animation, and math, are in tools.py for simp
 #   C:\imagemagick\convert.exe -delay 10 -loop 0 *population.png population_plot.gif
 #   C:\imagemagick\convert.exe -delay 10 -loop 0 *seedbank.png seedbank_plot.gif
 
-sy = 2    # Maximum number of steps a seed survives in the seedbank for
-ss = .92  # Survivorship of seeds in seedbank
 K  = 1.0  # Carrying Capacity
 gm = 0.04 # Growth Max
 l  = 0.6  # The fraction of plants that live
