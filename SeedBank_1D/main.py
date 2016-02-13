@@ -33,12 +33,8 @@ def main():
         #Create and Disperse Seeds
         SeedsInit = e*P[t] #Seeds produced in each cell
         SeedsFinal = np.matmul(mig, SeedsInit) #Seeds in each cell after dispersal
-        print "SeedsFinal: {}".format(SeedsFinal)
+        print("SeedsFinal: {}".format(SeedsFinal))
         
         #Kill Parts of living
-        
-        
-        
-        
         
 main() 

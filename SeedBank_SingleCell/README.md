@@ -1,7 +1,7 @@
 #SeedBank Single Cell Model
 
 This is a seedbank bank single cell model, where the population produces seeds that may be stored in the seedbank, or may germinate into a plant
-Seeds from the seedbank may germinate at a later date
+Seeds from the seedbank may germinate at a later date, but do not survive past 2 steps
 
 Environmental factors are not included in this model for the likelihood of germination and living rates
 

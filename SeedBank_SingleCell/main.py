@@ -4,12 +4,15 @@ from tools import * #All graphing, animation, and math, are in tools.py for simp
 #   C:\imagemagick\convert.exe -delay 10 -loop 0 *population.png population_plot.gif
 #   C:\imagemagick\convert.exe -delay 10 -loop 0 *seedbank.png seedbank_plot.gif
 
-K  = 1.0  #Carrying Capacity
-gm = 0.04 #Growth Max
-l  = 0.6  #The fraction of plants that live
-e  = 5    #Number of seeds per plants
-N  = 10   #Side Length of Space
-T  = 75   #Number of generations the program is run for
+sy = 2    # Maximum number of steps a seed survives in the seedbank for
+ss = .92  # Survivorship of seeds in seedbank
+K  = 1.0  # Carrying Capacity
+gm = 0.04 # Growth Max
+l  = 0.6  # The fraction of plants that live
+e  = 5    # Number of seeds per plants
+N  = 10   # Side Length of Space
+T  = 10   # Number of generations the program is run for
+print("T: {}".format(T))
 
 #Pt is Population of plant at time t
 def g(Pt):
@@ -17,7 +20,7 @@ def g(Pt):
     
 def main():
     P = np.arange(float(T)) #Plant Population where index is time t
-    S = np.arange(float(T)) #Seed Population where index is time t
+    S = np.arange(float(T*2)) #Seed Population where index is time t
     
     P[:] = 0.00
     S[:] = 0.00
@@ -34,6 +37,7 @@ def main():
     maxy_seed = max(S)
     
     for t in range(0, T-1):
+        print("Begin T: {}".format(t))
         save_image("population", range(0, t+2), P[:t+2], T, 1)
         save_image("seedbank", range(0, t+2), S[:t+2], T, maxy_seed) 
 main()

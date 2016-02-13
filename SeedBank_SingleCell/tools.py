@@ -29,9 +29,6 @@ def save_image(name, x, y, xmax, ymax):
         )
     )
 
-    figure = {
-        'data': [plot],
-        'layout': layout
-    }
-    py.image.save_as(figure, "{}{}.png".format(generate_image_id(len(x)-1), name))
+    figure = go.Figure(data=[plot], layout=layout)
+    py.image.save_as({"data":[plot]}, "{}{}.png".format(generate_image_id(len(x)-1), name))
     

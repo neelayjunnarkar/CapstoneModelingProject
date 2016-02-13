@@ -97,7 +97,7 @@ for t in range(0, int(T-1)): #range is [x,y)
     # }
    
     py.image.save_as(figure, "{}img.png".format(generate_image_id(t)))
-    print "{}".format(t)
+    print("{}".format(t))
     # s.write(dict(z=P, type='heatmap',colorscale=colorScale,zmin=0.0,zmax=1.0))
     # time.sleep(.05)
     
