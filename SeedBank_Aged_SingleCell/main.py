@@ -1,15 +1,16 @@
 from tools import *
 
+# Peculiarity: For this model to reach a steady state, the column
 #Constants
 T = 50
-e = 1.0
-g = .09
-M = np.arange(float(4)).reshape((float(2),float(2)))
+e = 1 
+g = 1 # Fraction of seeds that germinate
+M = np.arange(float(4)).reshape((float(2),float(2))) # Transition matrix. Values add to 1 on columns)
 M[:,:] = 0.0
-M[0,0] = 1-g
+M[0,0] = 0
 M[0,1] = e
 M[1,0] = g
-M[1,1] = (1-e)
+M[1,1] = 0.0 #annuals
 
 def main():
     #Data
@@ -31,6 +32,6 @@ def main():
     print X
     for t in range(0, T-1):
         print "Begin T: {}".format(t)
-        save_image("population",range(0, t+2), X[1,:t+2], T, max(X[1]))
-
+        save_image("population",range(0, t+2), X[1, :t+2], T, max(X[1]))
+        save_image("seedbank",  range(0, t+2), X[0, :t+2], T, max(X[0]))
 main()
