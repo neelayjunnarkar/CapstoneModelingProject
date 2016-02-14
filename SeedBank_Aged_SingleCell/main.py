@@ -2,15 +2,14 @@ from tools import *
 
 #Constants
 T = 50
-e = .7
-g = .9
-l = .6
+e = 1.0
+g = .09
 M = np.arange(float(4)).reshape((float(2),float(2)))
 M[:,:] = 0.0
-M[0,0] = 0
+M[0,0] = 1-g
 M[0,1] = e
 M[1,0] = g
-M[1,1] = 0
+M[1,1] = (1-e)
 
 def main():
     #Data
