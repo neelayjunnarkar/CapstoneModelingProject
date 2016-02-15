@@ -1,4 +1,23 @@
-# A Population Model using a Transition Matrix
-Test of using a transition matrix, which will be applied to the seed-bank models (yes, I could just use scalar multiplication)
+# A Seed Bank Model of a Single Cell Plant Population using a Transtion Matrix #
 
-Not a seedbank model
+* Models the plant and seed-bank popuulations in a single cell with no migration using a transition matrix
+* Survivorship of seeds is 1
+
+## Dependencies ##
+* python2.7.11
+* ipython
+* numpy
+* matplotlib
+ 
+A simple way to install these is to install Anaconda2
+
+## Running the program ##
+'ipython --pylab=tk'
+'%run main.py'
+
+## Equation ##
+X_t+1 = M*X_t
+
+where:
+* X_n is a 2x1 matrix (row x col) which holds seed-bank size and plant population
+* M is the 2x2 transition matrix
