@@ -3,11 +3,11 @@ from tools import *
 # Peculiarity: For this model to reach a steady state, the column
 #Constants
 T = 50
-e = 1 
-g = 1 # Fraction of seeds that germinate
+e = 1.0 
+g = .2 # Fraction of seeds that germinate
 M = np.arange(float(4)).reshape((float(2),float(2))) # Transition matrix. Values add to 1 on columns)
 M[:,:] = 0.0
-M[0,0] = 0
+M[0,0] = 0.0
 M[0,1] = e
 M[1,0] = g
 M[1,1] = 0.0 #annuals

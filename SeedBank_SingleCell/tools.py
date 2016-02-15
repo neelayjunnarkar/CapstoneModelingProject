@@ -1,6 +1,8 @@
 import plotly.plotly as py
 import plotly.graph_objs as go 
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as anim
 
 def num_digits(n):
     c = 1
