@@ -12,8 +12,9 @@
 A simple way to install these is to install Anaconda2
 
 ## Running the program ##
-'ipython --pylab=tk'
-'%run main.py'
+`ipython --pylab=tk`
+
+`%run main.py`
 
 ## Equation ##
 X_t+1 = M*X_t
