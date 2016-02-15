@@ -1,7 +1,6 @@
 # A Seed Bank Model of a Single Cell Plant Population using a Transtion Matrix #
 
 * Models the plant and seed-bank popuulations in a single cell with no migration using a transition matrix
-* Survivorship of seeds is 1.0
 
 ## Dependencies ##
 * python2.7.11
