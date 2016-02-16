@@ -13,13 +13,13 @@ print "Dependencies loaded..."
 T = 100
 
 # Seed Survivorship. Fraction of seeds that remain in seed bank that can germinate
-ss = 0.0
+ss = 1.0
 
 # Fraction of seeds that become reproductive plants
-gm = 0.94
+gm = 0.024
 
 # Fraction of plants that continue to live
-l = 0.9
+l = .9
 
 # Transition Matrix
 M = np.arange(float(2.0*2.0)).reshape((float(2.0),float(2.0)))
@@ -31,20 +31,20 @@ X = np.arange(float(2.0*T)).reshape(2.0,float(T))
 
 # Transition Matrix values
 M[:,:] = 0.0
-M[0,0] = ss  
+M[0,0] = ss*(1-gm)  
 M[0,1] = 1-l # Seeds created per plant
 M[1,0] = gm
 M[1,1] = l
 
 # Initial population values
 X[:,:] = 0.0
-X[0,0] = 0
-X[1,0] = 2 
+X[0,0] = 10.5
+X[1,0] = 10.5 
 
 # Set up plotting tools
 fig = plt.figure()
-axess = fig.add_subplot(211, xlim=(0.0,T), ylim=(0.0, 40))
-axesp = fig.add_subplot(212, xlim=(0.0,T), ylim=(0.0,40))
+axess = fig.add_subplot(211, xlim=(0.0,T), ylim=(0.0, 40), title='SeedBank Size')
+axesp = fig.add_subplot(212, xlim=(0.0,T), ylim=(0.0,40), title='Plant Population')
 seedbank, = axess.plot(range(T), X[0])
 plantpop, = axesp.plot(range(T), X[1])
 
@@ -92,6 +92,7 @@ def main():
     print "Beginning animation..."
     a = anim.FuncAnimation(fig, update_graph, frames=range(T-1), repeat=False, blit=True, interval=10) 
     a.save("seedbank_singlecell_transmat.mp4", fps=30, extra_args=['-vcodec', 'libx264'])
-    plt.show()
+    fig.tight_layout()
+    fig.show()
     print "Showing animation..."
 main()
