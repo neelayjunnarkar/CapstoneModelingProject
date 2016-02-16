@@ -21,11 +21,15 @@ A simple way to install these is to install Anaconda2
 ### Running the Program ###
 Run ipython from shell using tk as the backend for matplotlib:
 
-    `ipython --pylab=tk`
+```
+ipython --pylab=tk
+```
 
 Then, in ipython, run the main file:
 
-    `%run main.py`
+```
+%run main.py
+```
 
 ## Graphs ##
 
