@@ -1,4 +1,4 @@
-#Aged SeedBank Single Cell Model
+# Aged SeedBank Single Cell Model #
 
 This is a seedbank bank single cell model, where the population produces seeds that may be stored in the seedbank, or may germinate into a plant
 
@@ -6,12 +6,27 @@ Seeds from the seedbank may germinate at a later date, but do not survive past 2
 
 Environmental factors are not included in this model for the likelihood of germination and living rates
 
-##Code
+## Code ##
+
 main.py contains the model
 
-tools.py contains functions for graphing, and other functions not related to the model
+### Dependencies ###
+* python2.7.11
+* ipython
+* numpy
+* matplotlib
 
-##Graphs
-population_plot.gif is a graph of the density of the population in the cell over time
+A simple way to install these is to install Anaconda2
 
-seedbank_plot.gif is a graph of the seeds in both aged seedbanks in the cell over time
+### Running the Program ###
+Run ipython from shell using tk as the backend for matplotlib:
+
+    `ipython --pylab=tk`
+
+Then, in ipython, run the main file:
+
+    `%run main.py`
+
+## Graphs ##
+
+The graphs are saved as an .mp4
