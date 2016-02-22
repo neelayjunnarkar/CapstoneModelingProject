@@ -78,11 +78,53 @@ seedbank2, = axess2.plot(range(T), X[1])
 plantpop,  = axesp.plot(range(T), X[2])
 
 def update_data(t):
-
+    """
+    Is run each step
+    Calculates the seedbank size and plant population in the next step by 
+        multiplying M, the transition matrix, by X, the data matrix
+    """
+    print "Updating data..."
+    X_t = np.arange(3.0*1.0).reshape((3.0,1.0))
+    X_t[:,:] = 0.0
+    for n in range(3):
+        X_t[n,0] = X[n,t]
+    X_tp1 = np.matmul(M, X_t)
+    for n in range(3):
+        X[n, t+1] = X_tp1[n,0]
+    if t == T-2:
+        print "Data: {}".format(X[:t+2, :t+2])
+    
 def update_graph(t):
-
+    """
+    Is run each step
+    After calculating data by calling update_data, updates the data that will be plotted
+    """
+    print "Updating graph..."
+    update_data(t)
+    seedbank1.set_data(range(t+1), X[0, :t+1])
+    seedbank2.set_data(range(t+1), X[1, :t+1])
+    plantpop.set_data( range(t+1), X[2, :t+1])
+    return seedbank1, seedbank2, plantpop
+    
 def init_graph():
-
+    """
+    Initializes the plot to nothing
+    """
+    seedbank1.set_data([], [])
+    seedbank2.set_data([], [])
+    plantpop.set_data([],[])
+    return seedbank1, seedbank2, plantpop
+    
 def main():
-
+    """
+    Entry point for the program
+    Runs an animation of the model
+    This animation is displayed, and also saved to an mp4
+    """
+    print "Beginning animation..."
+    a = anim.FuncAnimation(fig, update_graph, frames=range(T-1), repeat=False, blit=True, interval=10) 
+    a.save("agedseedbank_singlecell.mp4", fps=30, extra_args=['-vcodec', 'libx264'])
+    fig.tight_layout()
+    fig.show()
+    print "Showing animation..."
 main()
