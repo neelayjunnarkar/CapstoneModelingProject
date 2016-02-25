@@ -18,17 +18,19 @@ print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled
 # Transition Matrix--calculates size of population at next data step
 #      S       P
 #    ---       ---
-# S  | ss(1-g) e |
+# S  | ss(1-g-f) e |
 #    |           |
 # P  | g       l |
 #    ---       ---
-# S: Seed Bank
-# P: Plant Population
+# S:            Seed Bank
+# P:            Plant Population
 #
-# ss: Seed Survivorship
-# g:  Germination fraction of seeds
-# e:  Seeds per plant
-# l:  Fraction of plants that live to next generation
+# ss:           Seed Survivorship
+# g:            Germination fraction of seeds in same cell
+# f:            Fraction of seeds that emigrate
+# ss(1 - g -f): Fraction of Seeds that remain in same cell 
+# e:            Seeds per plant
+# l:            Fraction of plants that live to next generation
 
 # Number of steps the model will be run for
 T = 4
@@ -39,8 +41,13 @@ N = 3
 # Seed Survivorship. Fraction of seeds that remain in seed bank that can germinate
 ss = 0.7
 
-# Fraction of seeds that become reproductive plants
+# Fraction of seeds that become reproductive plants in the same cell
 g = 0.024
+# g + f must be less than 1
+
+# Fraction of seeds that emigrate
+f = 0.5
+# g + f must be less than 1
 
 # Fraction of plants that continue to live
 l = 0
@@ -61,10 +68,10 @@ M = np.arange(float(2.0*2.0)).reshape((float(2.0),float(2.0)))
 X = np.arange(float(T*N*2.0)).reshape((float(T),2.0,float(N)))
 
 # Transition Matrix values
+# Transition matrix is the same for all cells (assuming cells are uniform)
 M[:,:] = 0.0
-M[0] = [ss*(1-g), e]
+M[0] = [ss*(1-g-f), e]
 M[1] = [g,        l]
-# print M
 
 # Initial population values
 X[:,:,:] = 0
@@ -88,6 +95,8 @@ def update_data(t):
     """
     if STEP_OUTPUT:
         print "Updating data..."
+    # Update each Cell using transition matrix
+    # Migrate seeds
     
 def update_graph(t):
     """
