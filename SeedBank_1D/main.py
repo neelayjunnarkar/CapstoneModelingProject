@@ -36,7 +36,7 @@ print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled
 T = 12
 
 # Number of cells
-N = 3
+N = 5
 
 # Seed Survivorship. Fraction of seeds that remain in seed bank that can germinate
 ss = 0.7
@@ -53,10 +53,15 @@ f = 0.0
 l = 0
 
 # Seeds produced per plant
-e = 27
+e = 270
 
 # Transition Matrix
+# Transition matrix * cell data = next step cell data
 M = np.arange(float(2.0*2.0)).reshape((float(2.0),float(2.0)))
+
+# Seed Dispersion Matrix
+# Seed Bank Space data * seed dispersion matrix = next seed bank space data
+D = np.arange(float(N*N)).reshape((float(N),float(N)))
 
 # Matrix holding seedbank and plant population data
 # [time, cell data, cell]
@@ -71,8 +76,13 @@ X = np.arange(float(T*N*2.0)).reshape((float(T),2.0,float(N)))
 # Transition matrix is the same for all cells (assuming cells are uniform)
 M[:,:] = 0.0
 M[0] = [ss*(1-g-f), e]
-M[1] = [g,        l]
-print M
+M[1] = [g,          l]
+
+# Seed Bank Dispersion Matrix values
+D[:,:] = 0.0
+for row in range(0,N):
+    for i in range(0,N):
+        D[row,i] = 2**(-1-(np.abs(row-i)))
 
 # Initial population values
 X[:,:,:] = 0
@@ -102,9 +112,9 @@ def update_data(t):
         X_next = np.matmul(M, X_curr)
         X[t+1,0,cell_i] = X_next[0]
         X[t+1,1,cell_i] = X_next[1]
-    print X[t]
     # Migrate seeds
-    
+    X[t+1,0] = np.matmul(X[t,1],D)
+
 def update_graph(t):
     """
     Is run each step
@@ -132,7 +142,7 @@ def main():
     This animation is displayed, and also saved to an mp4
     """
     print "Beginning animation..."
-    a = anim.FuncAnimation(fig, update_graph, frames=range(T-1), repeat=False, blit=True, interval=10) 
+    a = anim.FuncAnimation(fig, update_graph, frames=range(T-1), repeat=False, blit=True, interval=40) 
     a.save("seedbank_1d.mp4", fps=30, extra_args=['-vcodec', 'libx264'])
     fig.tight_layout()
     fig.show()
