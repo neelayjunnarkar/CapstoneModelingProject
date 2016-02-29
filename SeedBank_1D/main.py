@@ -18,7 +18,7 @@ print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled
 # Transition Matrix--calculates size of population at next data step
 #      S       P
 #    ---       ---
-# S  | ss(1-g-f) e |
+# S  | ss(1-g) e |
 #    |           |
 # P  | g       l |
 #    ---       ---
@@ -27,8 +27,6 @@ print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled
 #
 # ss:           Seed Survivorship
 # g:            Germination fraction of seeds in same cell
-# f:            Fraction of seeds that emigrate
-# ss(1 - g -f): Fraction of Seeds that remain in same cell 
 # e:            Seeds per plant
 # l:            Fraction of plants that live to next generation
 
@@ -43,11 +41,6 @@ ss = 0.7
 
 # Fraction of seeds that become reproductive plants in the same cell
 g = 0.024
-# g + f must be less than 1
-
-# Fraction of seeds that emigrate
-f = 0.0
-# g + f must be less than 1
 
 # Fraction of plants that continue to live
 l = 0
@@ -75,10 +68,11 @@ X = np.arange(float(T*N*2.0)).reshape((float(T),2.0,float(N)))
 # Transition Matrix values
 # Transition matrix is the same for all cells (assuming cells are uniform)
 M[:,:] = 0.0
-M[0] = [ss*(1-g-f), e]
-M[1] = [g,          l]
+M[0] = [ss*(1-g), e]
+M[1] = [g,        l]
 
 # Seed Bank Dispersion Matrix values
+# .5 seeds stay in cell, and decreases by factor of 1/2 over cells
 D[:,:] = 0.0
 for row in range(0,N):
     for i in range(0,N):
@@ -86,12 +80,12 @@ for row in range(0,N):
 
 # Initial population values
 X[:,:,:] = 0
-X[0,0,1] = 23  # Set seedbank of 2nd cell at time 0
+X[0,0,1] = 2  # Set seedbank of 2nd cell at time 0
 X[0,1,1] = 0.5 # Set population size of 2nd cell at time 0
   
 # Set up plotting tools
-pop_maxy = 1
-seed_maxy = 30
+pop_maxy = 30
+seed_maxy = 300
 fig = plt.figure()
 axesp = fig.add_subplot(211, xlim=(0.0,N), ylim=(0.0, pop_maxy), title='Plant Population')
 axess = fig.add_subplot(212, xlim=(0.0,N), ylim=(0.0, seed_maxy), title='Seed Bank Size' )
@@ -114,7 +108,8 @@ def update_data(t):
         X[t+1,1,cell_i] = X_next[1]
     # Migrate seeds
     X[t+1,0] = np.matmul(X[t,0],D)
-    print X[t]
+    if STEP_OUTPUT:
+        print X[t]
     
 def update_graph(t):
     """
@@ -143,7 +138,7 @@ def main():
     This animation is displayed, and also saved to an mp4
     """
     print "Beginning animation..."
-    a = anim.FuncAnimation(fig, update_graph, frames=range(T-1), repeat=False, blit=True, interval=40) 
+    a = anim.FuncAnimation(fig, update_graph, frames=range(T-1), repeat=False, blit=True, interval=10) 
     a.save("seedbank_1d.mp4", fps=30, extra_args=['-vcodec', 'libx264'])
     fig.tight_layout()
     fig.show()
