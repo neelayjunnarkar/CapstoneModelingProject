@@ -3,6 +3,7 @@ Model of Plant dispersion and growth in 1d space
     Non-aged seed-bank
     Uses transition matrix for cell update
     Migration matrix for migration
+    Takes into account source effects
 
 author: Neelay Junnarkar
 """
@@ -15,6 +16,14 @@ print "Dependencies loaded..."
 STEP_OUTPUT = True
 print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled")
 
+
+#
+#
+# NEED A WAY TO MODIFY CONDITIONS OF EACH CELL (ENACT SOURCE EFFECTS)
+#
+#
+
+
 # Transition Matrix--calculates size of population at next data step
 #      S       P
 #    ---       ---
@@ -24,7 +33,6 @@ print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled
 #    ---       ---
 # S:            Seed Bank
 # P:            Plant Population
-#
 # ss:           Seed Survivorship
 # g:            Germination fraction of seeds in same cell
 # e:            Seeds per plant
@@ -48,6 +56,7 @@ l = 0
 # Seeds produced per plant
 e = 270
 
+# TODO: CHANGE TO BE A N-LENGTH LIST OF TRANSTION MATRICES SO EACH CELL HAS ITS OWN
 # Transition Matrix
 # Transition matrix * cell data = next step cell data
 M = np.arange(float(2.0*2.0)).reshape((float(2.0),float(2.0)))
@@ -65,6 +74,7 @@ D = np.arange(float(N*N)).reshape((float(N),float(N)))
 # cell:      indices[0,N-1]
 X = np.arange(float(T*N*2.0)).reshape((float(T),2.0,float(N)))
 
+# TODO: CHANGE TO BE A N-LENGTH LIST OF TRANSTION MATRICES SO EACH CELL HAS ITS OWN
 # Transition Matrix values
 # Transition matrix is the same for all cells (assuming cells are uniform)
 M[:,:] = 0.0
@@ -103,6 +113,7 @@ def update_data(t):
     # Update each Cell using transition matrix
     for cell_i in range(0, int(N)):
         X_curr = np.mat([[X[t,0,cell_i]],[X[t,1,cell_i]]])
+        # HAVE TO USE CELL-APPROPRIATE TRANSITION MATRIX
         X_next = np.matmul(M, X_curr)
         X[t+1,0,cell_i] = X_next[0]
         X[t+1,1,cell_i] = X_next[1]
