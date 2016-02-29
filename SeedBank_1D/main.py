@@ -33,7 +33,7 @@ print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled
 # l:            Fraction of plants that live to next generation
 
 # Number of steps the model will be run for
-T = 4
+T = 12
 
 # Number of cells
 N = 3
@@ -46,7 +46,7 @@ g = 0.024
 # g + f must be less than 1
 
 # Fraction of seeds that emigrate
-f = 0.5
+f = 0.0
 # g + f must be less than 1
 
 # Fraction of plants that continue to live
@@ -72,6 +72,7 @@ X = np.arange(float(T*N*2.0)).reshape((float(T),2.0,float(N)))
 M[:,:] = 0.0
 M[0] = [ss*(1-g-f), e]
 M[1] = [g,        l]
+print M
 
 # Initial population values
 X[:,:,:] = 0
@@ -79,8 +80,8 @@ X[0,0,1] = 23  # Set seedbank of 2nd cell at time 0
 X[0,1,1] = 0.5 # Set population size of 2nd cell at time 0
   
 # Set up plotting tools
-pop_maxy = 11
-seed_maxy = 300
+pop_maxy = 1
+seed_maxy = 30
 fig = plt.figure()
 axesp = fig.add_subplot(211, xlim=(0.0,N), ylim=(0.0, pop_maxy), title='Plant Population')
 axess = fig.add_subplot(212, xlim=(0.0,N), ylim=(0.0, seed_maxy), title='Seed Bank Size' )
@@ -96,6 +97,12 @@ def update_data(t):
     if STEP_OUTPUT:
         print "Updating data..."
     # Update each Cell using transition matrix
+    for cell_i in range(0, int(N)):
+        X_curr = np.mat([[X[t,0,cell_i]],[X[t,1,cell_i]]])
+        X_next = np.matmul(M, X_curr)
+        X[t+1,0,cell_i] = X_next[0]
+        X[t+1,1,cell_i] = X_next[1]
+    print X[t]
     # Migrate seeds
     
 def update_graph(t):
@@ -106,8 +113,8 @@ def update_graph(t):
     if STEP_OUTPUT:
         print "Updating graph..."
     update_data(t)
-    seedbank.set_data(range(t+1), )
-    plantpop.set_data(range(t+1), )
+    seedbank.set_data(range(N), X[t,0])
+    plantpop.set_data(range(N), X[t,1])
     return seedbank, plantpop
     
 def init_graph():
