@@ -33,7 +33,7 @@ print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled
 # l:            Fraction of plants that live to next generation
 
 # Number of steps the model will be run for
-T = 12
+T = 50
 
 # Number of cells
 N = 5
@@ -113,8 +113,9 @@ def update_data(t):
         X[t+1,0,cell_i] = X_next[0]
         X[t+1,1,cell_i] = X_next[1]
     # Migrate seeds
-    X[t+1,0] = np.matmul(X[t,1],D)
-
+    X[t+1,0] = np.matmul(X[t,0],D)
+    print X[t]
+    
 def update_graph(t):
     """
     Is run each step
