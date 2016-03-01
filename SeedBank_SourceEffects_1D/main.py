@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 print "Dependencies loaded..."
 
-STEP_OUTPUT = True
+STEP_OUTPUT = False
 print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled")
 
 
@@ -45,7 +45,7 @@ T = 30
 N = 50
 
 # Seed Survivorship. Fraction of seeds that remain in seed bank that can germinate
-ss = 1
+ss = 0.3
 
 # Fraction of seeds that become reproductive plants in the same cell
 g = 0.024
@@ -87,7 +87,11 @@ for matrix in M:
 D[:,:] = 0.0
 for row in range(0,N):
     for i in range(0,N):
-        D[row,i] = 2**(-1-(np.abs(row-i)))
+        val = 2**(-1-(np.abs(row-i)))
+        if val > 0.0001 and np.isfinite(val):
+            D[row,i] = val
+        else:
+            D[row,i] = 0.0
 
 # Initial population values
 X[:,:,:] = 0
