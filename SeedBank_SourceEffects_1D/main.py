@@ -56,7 +56,6 @@ l = 0
 # Seeds produced per plant
 e = 27
 
-# TODO: CHANGE TO BE A N-LENGTH LIST OF TRANSTION MATRICES SO EACH CELL HAS ITS OWN
 # Transition Matrix
 # Transition matrix * cell data = next step cell data
 M = np.arange(float(N*2.0*2.0)).reshape((float(N),float(2.0),float(2.0)))
@@ -74,7 +73,6 @@ D = np.arange(float(N*N)).reshape((float(N),float(N)))
 # cell:      indices[0,N-1]
 X = np.arange(float(T*N*2.0)).reshape((float(T),2.0,float(N)))
 
-# TODO: CHANGE TO BE A N-LENGTH LIST OF TRANSTION MATRICES SO EACH CELL HAS ITS OWN
 # Transition Matrix values
 # Transition matrix is the same for all cells (assuming cells are uniform)
 for matrix in M:
@@ -83,7 +81,7 @@ for matrix in M:
     matrix[1] = [g,        l]
 
 # Seed Bank Dispersion Matrix values
-# .5 seeds stay in cell, and decreases by factor of 1/2 over cells
+# 0.5 seeds stay in cell, and decreases by factor of 1/2 over cells
 D[:,:] = 0.0
 for row in range(0,N):
     for i in range(0,N):
@@ -95,7 +93,7 @@ for row in range(0,N):
 
 # Initial population values
 X[:,:,:] = 0
-X[0,0,1] = 2  # Set seedbank of 2nd cell at time 0
+X[0,0,1] = 2   # Set seedbank of 2nd cell at time 0
 X[0,1,1] = 0.5 # Set population size of 2nd cell at time 0
   
 # Set up plotting tools
@@ -118,7 +116,6 @@ def update_data(t):
     # Update each Cell using transition matrix
     for cell_i in range(0, int(N)):
         X_curr = np.mat([[X[t,0,cell_i]],[X[t,1,cell_i]]])
-        # HAVE TO USE CELL-APPROPRIATE TRANSITION MATRIX
         X_next = np.matmul(M[cell_i], X_curr)
         X[t+1,0,cell_i] = X_next[0]
         X[t+1,1,cell_i] = X_next[1]
