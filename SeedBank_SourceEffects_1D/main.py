@@ -39,13 +39,13 @@ print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled
 # l:            Fraction of plants that live to next generation
 
 # Number of steps the model will be run for
-T = 50
+T = 30
 
 # Number of cells
-N = 5
+N = 50
 
 # Seed Survivorship. Fraction of seeds that remain in seed bank that can germinate
-ss = 0.7
+ss = 1
 
 # Fraction of seeds that become reproductive plants in the same cell
 g = 0.024
@@ -54,12 +54,12 @@ g = 0.024
 l = 0
 
 # Seeds produced per plant
-e = 270
+e = 27
 
 # TODO: CHANGE TO BE A N-LENGTH LIST OF TRANSTION MATRICES SO EACH CELL HAS ITS OWN
 # Transition Matrix
 # Transition matrix * cell data = next step cell data
-M = np.arange(float(2.0*2.0)).reshape((float(2.0),float(2.0)))
+M = np.arange(float(N*2.0*2.0)).reshape((float(N),float(2.0),float(2.0)))
 
 # Seed Dispersion Matrix
 # Seed Bank Space data * seed dispersion matrix = next seed bank space data
@@ -77,9 +77,10 @@ X = np.arange(float(T*N*2.0)).reshape((float(T),2.0,float(N)))
 # TODO: CHANGE TO BE A N-LENGTH LIST OF TRANSTION MATRICES SO EACH CELL HAS ITS OWN
 # Transition Matrix values
 # Transition matrix is the same for all cells (assuming cells are uniform)
-M[:,:] = 0.0
-M[0] = [ss*(1-g), e]
-M[1] = [g,        l]
+for matrix in M:
+    matrix[:,:] = 0.0
+    matrix[0] = [ss*(1-g), e]
+    matrix[1] = [g,        l]
 
 # Seed Bank Dispersion Matrix values
 # .5 seeds stay in cell, and decreases by factor of 1/2 over cells
@@ -97,8 +98,8 @@ X[0,1,1] = 0.5 # Set population size of 2nd cell at time 0
 pop_maxy = 30
 seed_maxy = 300
 fig = plt.figure()
-axesp = fig.add_subplot(211, xlim=(0.0,N), ylim=(0.0, pop_maxy), title='Plant Population')
-axess = fig.add_subplot(212, xlim=(0.0,N), ylim=(0.0, seed_maxy), title='Seed Bank Size' )
+axesp = fig.add_subplot(211, xlim=(0.0,N-1), ylim=(0.0, pop_maxy), title='Plant Population')
+axess = fig.add_subplot(212, xlim=(0.0,N-1), ylim=(0.0, seed_maxy), title='Seed Bank Size' )
 seedbank, = axess.plot(range(N), X[0,0])
 plantpop, = axesp.plot(range(N), X[0,1])
 
@@ -114,11 +115,11 @@ def update_data(t):
     for cell_i in range(0, int(N)):
         X_curr = np.mat([[X[t,0,cell_i]],[X[t,1,cell_i]]])
         # HAVE TO USE CELL-APPROPRIATE TRANSITION MATRIX
-        X_next = np.matmul(M, X_curr)
+        X_next = np.matmul(M[cell_i], X_curr)
         X[t+1,0,cell_i] = X_next[0]
         X[t+1,1,cell_i] = X_next[1]
     # Migrate seeds
-    X[t+1,0] = np.matmul(X[t,0],D)
+    X[t+1,0] = np.matmul(X[t+1,0],D)
     if STEP_OUTPUT:
         print X[t]
     
