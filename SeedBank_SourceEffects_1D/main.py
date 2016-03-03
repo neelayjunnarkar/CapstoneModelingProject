@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 print "Dependencies loaded..."
 
-STEP_OUTPUT = False
+STEP_OUTPUT = True
 print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled")
 
 
@@ -39,10 +39,10 @@ print "Output on each step is {}".format("enabled" if STEP_OUTPUT else "disabled
 # l:            Fraction of plants that live to next generation
 
 # Number of steps the model will be run for
-T = 30
+T = 50
 
 # Number of cells
-N = 50
+N = 20
 
 # Seed Survivorship. Fraction of seeds that remain in seed bank that can germinate
 ss = 0.3
@@ -79,6 +79,14 @@ for matrix in M:
     matrix[:,:] = 0.0
     matrix[0] = [ss*(1-g), e]
     matrix[1] = [g,        l]
+# M[N/2-1,0] = [ss*(1-g/1.5)/1.5, e]
+# M[N/2-1,1] = [g/1.5,        l/1.5]
+# M[N/2+1,0] = [ss*(1-g/1.5)/1.5, e]
+# M[N/2+1,1] = [g/1.5,        l/1.5]
+# M[N/2-2,0] = [ss*(1-g/1.5)/1.5, e]
+# M[N/2-2,1] = [g/1.5,        l/1.5]
+# M[N/2+2,0] = [ss*(1-g/1.5)/1.5, e]
+# M[N/2+2,1] = [g/1.5,        l/1.5]
 
 # Seed Bank Dispersion Matrix values
 # 0.5 seeds stay in cell, and decreases by factor of 1/2 over cells
@@ -93,12 +101,12 @@ for row in range(0,N):
 
 # Initial population values
 X[:,:,:] = 0
-X[0,0,1] = 2   # Set seedbank of 2nd cell at time 0
-X[0,1,1] = 0.5 # Set population size of 2nd cell at time 0
+X[0,0,N/2] = 2.0   # Set seedbank of 2nd cell at time 0
+X[0,1,N/2] = 0.1 # Set population size of 2nd cell at time 0
   
 # Set up plotting tools
 pop_maxy = 30
-seed_maxy = 300
+seed_maxy = 1000
 fig = plt.figure()
 axesp = fig.add_subplot(211, xlim=(0.0,N-1), ylim=(0.0, pop_maxy), title='Plant Population')
 axess = fig.add_subplot(212, xlim=(0.0,N-1), ylim=(0.0, seed_maxy), title='Seed Bank Size' )
