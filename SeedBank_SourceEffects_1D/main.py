@@ -48,13 +48,13 @@ N = 20
 ss = 0.3
 
 # Fraction of seeds that become reproductive plants in the same cell
-g = 0.0024
+g = 0.0094
 
 # Fraction of plants that continue to live
 l = 0
 
 # Seeds produced per plant
-e = 65
+e = 105
 
 # Transition Matrix
 # Transition matrix * cell data = next step cell data
@@ -91,13 +91,14 @@ for src_i in range(0,N):
     cells_to_left = 1 #src_i # Number of cells to the left to which seeds will be dispersed
     cells_to_right = 1#N-src_i-1 # Number of cells to the right to which seeds will be dispersed
     for dst_i in range(src_i-cells_to_left,src_i+cells_to_right+1):
-        if dst_i < 0 or dst_i >= N:
+        if dst_i < 0 or dst_i >= N: # Bound-check
             continue
         val = ((1-dont_disperse)*(1-dispersion_r))/(2**(np.abs(src_i-dst_i)-1)*(2-dispersion_r**cells_to_left-dispersion_r**cells_to_right))
         if np.isfinite(val):
             D[src_i,dst_i] = val
         else:
             D[src_i,dst_i] = 0.0
+# Reset values of seeds not dispersing
 for src_i in range(0,N):
     D[src_i,src_i] = dont_disperse
 print D
@@ -117,7 +118,7 @@ D_original = np.copy(D)
 # D[N/2+5:].fill(0.0)
 
 # Set up plotting tools
-pop_maxy = 400
+pop_maxy = 200
 seed_maxy = 18000
 fig = plt.figure()
 axesp = fig.add_subplot(211, xlim=(0.0,N-1), ylim=(0.0, pop_maxy), title='Plant Population')
@@ -131,15 +132,13 @@ def update_data(t):
     Calculates the seedbank size and plant population in the next step by 
         multiplying M, the transition matrix, by X, the data matrix
     """
-    global c
-    global c2
     global M
     global D
     global M_original
     global D_original
     
     if STEP_OUTPUT:
-        print "Updating data..."
+        print "[t: {}] Updating data...".format(t)
         
     # Manual changes in transition matrix and disperion matrix
 #    if t == 60:
@@ -168,8 +167,7 @@ def update_data(t):
     if STEP_OUTPUT:
         print X[t]
 
-    if t == T-1:
-        print X[t]
+    if t == T-2:
         print "Data Calculation finished"
     
 def update_graph(t):
@@ -178,7 +176,7 @@ def update_graph(t):
     After calculating data by calling update_data, updates the data that will be plotted
     """
     if STEP_OUTPUT:
-        print "Updating graph..."
+        print "[t: {}] Updating graph...".format(t)
     update_data(t)
     seedbank.set_data(range(N), X[t,0])
     plantpop.set_data(range(N), X[t,1])
@@ -200,8 +198,8 @@ def main():
     """
     print "Beginning animation..."
     a = anim.FuncAnimation(fig, update_graph, frames=range(T-1), repeat=False, blit=True, interval=100) 
-    a.save("seedbank_1d.mp4", fps=30, extra_args=['-vcodec', 'libx264'])
     fig.tight_layout()
     fig.show()
+    a.save("seedbank_1d.mp4", fps=30, extra_args=['-vcodec', 'libx264'])
     print "Showing animation..."
 main()
