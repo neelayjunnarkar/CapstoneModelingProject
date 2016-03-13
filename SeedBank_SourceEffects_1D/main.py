@@ -87,9 +87,10 @@ D[:, :] = 0.0
 dont_disperse = 0.5  # Fraction of seeds that remain in same cell
 dispersion_r = 0.5  # Common ratio of geometric sequence by which seed dispersal fraction decreases as distance increases
 for src_i in range(0, N):
-    cells_to_left = 0#src_i # Number of cells to the left to which seeds will be dispersed
-    cells_to_right = N-src_i-1 # Number of cells to the right to which seeds will be dispersed
-     
+    cells_to_left = 0  # src_i # Number of cells to the left to which seeds will be dispersed
+    # Number of cells to the right to which seeds will be dispersed
+    cells_to_right = N - src_i - 1
+
     for dst_i in range(src_i - cells_to_left, src_i + cells_to_right + 1):
         if dst_i < 0 or dst_i >= N:  # Bound-check
             continue
@@ -125,9 +126,6 @@ axess = fig.add_subplot(212, xlim=(0.0, N - 1),
 seedbank, = axess.plot(range(N), X[0, 0])
 plantpop, = axesp.plot(range(N), X[0, 1])
 
-c1 = 0
-
-print "c: {}".format(c1)
 
 def update_data(t):
     """
@@ -135,7 +133,7 @@ def update_data(t):
     Calculates the seedbank size and plant population in the next step by
         multiplying M, the transition matrix, by X, the data matrix
     """
-    global c1
+
     global M
     global D
     global M_original
@@ -144,9 +142,6 @@ def update_data(t):
     if STEP_OUTPUT:
         print "[t: {}] Updating data...".format(t)
     # Manual changes in transition matrix and disperion matrix
-    if t == 60:
-        print "hi"
-        c1 = c1+1
 #    if t == 60 and c == 2:
 #         c = c+1
 #         M[N/2+5:, 0] = [ss*(1-g), 0]
@@ -177,7 +172,6 @@ def update_data(t):
     if STEP_OUTPUT:
         print X[t]
     if t == T - 2:
-        print "c1: {}".format(c1)
         print "Data Calculation finished"
 
 
@@ -214,9 +208,9 @@ def main():
         T - 1), repeat=False, blit=True, interval=100)
     fig.tight_layout()
     fig.show()
-    if !GRAPHING_SCENARIOS:
+    if not GRAPHING_SCENARIOS:
         a.save("seedbank_1d.mp4", fps=30, extra_args=['-vcodec', 'libx264'])
     print "Showing animation..."
-    if !GRAPHING_SCENARIOS:
+    if not GRAPHING_SCENARIOS:
         print "SCENARIOS ARE NOT CORRECT"
 main()
