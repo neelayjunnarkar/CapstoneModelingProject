@@ -19,7 +19,7 @@ ss = .7
 gm = 0.024
 
 # Fraction of plants that continue to live
-l = 0
+l = .0
 
 #Number of seeds produced per plant
 e = 13.2
