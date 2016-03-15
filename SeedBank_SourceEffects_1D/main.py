@@ -36,10 +36,10 @@ elif GRAPHING_SCENARIOS == False:
 # l:            Fraction of plants that live to next generation
 
 # Number of steps the model will be run for
-T = 75
+T = 100
 
 # Number of cells
-N = 20
+N = 50
 
 # Seed Survivorship. Fraction of seeds that remain in seed bank that can
 # germinate
@@ -87,10 +87,9 @@ D[:, :] = 0.0
 dont_disperse = 0.5  # Fraction of seeds that remain in same cell
 dispersion_r = 0.5  # Common ratio of geometric sequence by which seed dispersal fraction decreases as distance increases
 for src_i in range(0, N):
-    cells_to_left = 0  # src_i # Number of cells to the left to which seeds will be dispersed
+    cells_to_left = src_i # Number of cells to the left to which seeds will be dispersed
     # Number of cells to the right to which seeds will be dispersed
     cells_to_right = N - src_i - 1
-
     for dst_i in range(src_i - cells_to_left, src_i + cells_to_right + 1):
         if dst_i < 0 or dst_i >= N:  # Bound-check
             continue
@@ -104,6 +103,13 @@ for src_i in range(0, N):
 for src_i in range(0, N):
     D[src_i, src_i] = dont_disperse
 print D
+
+# Initial Modifications to Dispersion and transition matrix
+# Initial inundation of right side. Good graphs with N = 50, T = 75, 
+# for cell_i in range(N-10, N):
+#     M[cell_i,0] = [ss*(1-g*0.001), 0.0]
+#     M[cell_i,1] = [g*0.001, l*0.001]
+
 # Initial population values
 X[:, :, :] = 0
 X[0, 0, N / 2] = 2.0   # Set seedbank of 2nd cell at time 0
@@ -113,11 +119,11 @@ X[0, 1, N / 2] = 0.1  # Set population size of 2nd cell at time 0
 M_original = np.copy(M)
 D_original = np.copy(D)
 
-# Initial Modifications to Dispersion and transition matrix
+
 
 # Set up plotting tools
-pop_maxy = 200
-seed_maxy = 18000
+pop_maxy = 2000
+seed_maxy = 180000
 fig = plt.figure()
 axesp = fig.add_subplot(211, xlim=(0.0, N - 1),
                         ylim=(0.0, pop_maxy), title='Plant Population')
@@ -142,30 +148,13 @@ def update_data(t):
     if STEP_OUTPUT:
         print "[t: {}] Updating data...".format(t)
     # Manual changes in transition matrix and disperion matrix
-#    if t == 60 and c == 2:
-#         c = c+1
-#         M[N/2+5:, 0] = [ss*(1-g), 0]
-#         M[N/2+5:, 1] = [0,        0]
-#         D[N/2+5:].fill(0.0)
-# 	    print "hi"
-# 	print c
-#    if t == 68:
-# 	c2 = c2+1
-#    if t == 68 and c2 == 2:
-#        M = np.copy(M_original)
-#        D = np.copy(D_original)
-
-    # Calculate Seeds Produced
-
-    # Update each Cell using transition matrix
-    # for cell_i in range(0, int(N)):
-    #     X_curr = np.mat([[X[t, 0, cell_i]], [X[t, 1, cell_i]]])
-    #     X_next = np.matmul(M[cell_i], X_curr)
-    #     X[t + 1, 0, cell_i] = X_next[0]
-    #     X[t + 1, 1, cell_i] = X_next[1]
+    if t == 30:
+        # Initial inundation of right side. Good graphs with N = 50, T = 75, 
+        for cell_i in range(N-26, N):
+            M[cell_i,0] = [ss*(1-g*0.001), 0.0]
+            M[cell_i,1] = [g*0.001, l*0.001]
 
     # Migrate Seeds Produced
-    # X[t + 1, 0] = np.matmul(X[t + 1, 0], D)
     X[t + 1] = np.transpose([np.matmul(M[c], X[t, :, c]) for c in range(0, int(N))]) + \
         np.matmul(e * np.transpose([[X[t, 1, c], 0]
                                     for c in range(0, int(N))]), D)
