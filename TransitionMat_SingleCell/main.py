@@ -13,13 +13,16 @@ print "Dependencies loaded..."
 T = 100
 
 # Seed Survivorship. Fraction of seeds that remain in seed bank that can germinate
-ss = 1.0
+ss = .7
 
 # Fraction of seeds that become reproductive plants
 gm = 0.024
 
 # Fraction of plants that continue to live
-l = .9
+l = 0
+
+#Number of seeds produced per plant
+e = 13.2
 
 # Transition Matrix
 M = np.arange(float(2.0*2.0)).reshape((float(2.0),float(2.0)))
@@ -32,7 +35,7 @@ X = np.arange(float(2.0*T)).reshape(2.0,float(T))
 # Transition Matrix values
 M[:,:] = 0.0
 M[0,0] = ss*(1-gm)  
-M[0,1] = 1-l # Seeds created per plant
+M[0,1] = e # Seeds created per plant
 M[1,0] = gm
 M[1,1] = l
 
